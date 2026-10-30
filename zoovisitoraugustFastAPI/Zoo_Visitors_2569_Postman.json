@@ -1,0 +1,169 @@
+{
+  "info": {
+    "name": "Zoo Visitors FY2569 - FastAPI Government Dataset",
+    "description": "CPE5013 Data.go.th Zoo Visitors FY 2569; source=excerpt is labelled partial; source=file/live prove original govt resource",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01 Health",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/health",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "02 Swagger Docs",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/docs",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "03 Verified public-table excerpt (offline)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/zoo-visitors?source=excerpt&limit=5",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });",
+              "pm.test('Returns real-source JSON', function() { const o = pm.response.json(); pm.expect(o.fiscal_year).to.eql(2569); pm.expect(o.source.dataset_url).to.include('data.go.th'); pm.expect(o.data.length).to.be.above(0); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "04 Original downloaded official CSV (add file first)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/zoo-visitors?source=file&limit=5",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });",
+              "pm.test('Returns real-source JSON', function() { const o = pm.response.json(); pm.expect(o.fiscal_year).to.eql(2569); pm.expect(o.source.dataset_url).to.include('data.go.th'); pm.expect(o.data.length).to.be.above(0); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "05 Live Data.go.th CKAN (may return 503)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/zoo-visitors?source=live&limit=5",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });",
+              "pm.test('Returns real-source JSON', function() { const o = pm.response.json(); pm.expect(o.fiscal_year).to.eql(2569); pm.expect(o.source.dataset_url).to.include('data.go.th'); pm.expect(o.data.length).to.be.above(0); });"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "06 Filter Chiang Mai verified excerpt",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Accept",
+            "value": "application/json"
+          }
+        ],
+        "url": "{{baseUrl}}/api/zoo-visitors?source=excerpt&zoo=%E0%B9%80%E0%B8%8A%E0%B8%B5%E0%B8%A2%E0%B8%87%E0%B9%83%E0%B8%AB%E0%B8%A1%E0%B9%88&limit=3",
+        "description": "See README for source reliability and expected outcomes"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test('Expected HTTP 200', function() { pm.response.to.have.status(200); });",
+              "pm.test('Returns real-source JSON', function() { const o = pm.response.json(); pm.expect(o.fiscal_year).to.eql(2569); pm.expect(o.source.dataset_url).to.include('data.go.th'); pm.expect(o.data.length).to.be.above(0); });"
+            ]
+          }
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://127.0.0.1:8000"
+    }
+  ]
+}
